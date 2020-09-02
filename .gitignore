@@ -1,16 +1,7 @@
-# Logs
-*.log
-npm-debug.log*
-
-# Dependency directories
+# Dependency directories and npm stuff
 node_modules/
-jspm_packages/
+package-lock.json
 
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
+# Eslint
 .eslintcache
-
-# Output of 'npm pack'
-*.tgz
+.eslintrc.json

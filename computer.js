@@ -1,9 +1,11 @@
-const args = require('args-parser')(process.argv)
+const { parseEquation } = require('./parse.js')
 
-if (!Object.keys(args).length || !args.equation) {
-	console.log('Usage:\n\tnode computer.js -equation="<equation>"')
-	process.exit()
-} else {
-	// PROCESS EQUATION
-	console.log('W.I.P')
+const solveEquation = ({ equation, verbose }) => {
+	const { degree, leftSide, rightSide } = parseEquation({ equation, verbose })
 }
+
+const plotEquation = () =>  {
+	return undefined
+}
+
+module.exports = { solveEquation, plotEquation }

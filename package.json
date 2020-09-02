@@ -1,0 +1,25 @@
+{
+  "name": "42-computerv1",
+  "version": "1.0.0",
+  "description": "Small quadratic equations solver",
+  "main": "computer.js",
+  "dependencies": {
+    "args-parser": "^1.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kibotrel/42-ComputerV1.git"
+  },
+  "author": "BOTREL Kilian",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kibotrel/42-ComputerV1/issues"
+  },
+  "homepage": "https://github.com/kibotrel/42-ComputerV1#readme",
+  "devDependencies": {
+    "eslint": "^7.8.1"
+  }
+}

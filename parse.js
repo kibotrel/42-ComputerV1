@@ -25,12 +25,10 @@ const parseArgs = ({ argv }) => {
 					Object.assign(args, { [argument.toLowerCase()]: true })
 				else
 					throw 'illegalArgument'
-			} else {
-				if (argument.includes('=') && isValidVariable(argument))
-					Object.assign(args, { [argument.substring(0, argument.indexOf('=')).toLowerCase()]: argument.substring(argument.indexOf('=') + 1).toUpperCase() })
-				else
-					throw 'illegalArgument'
-			}
+			} else if (argument.includes('=') && isValidVariable(argument))
+				Object.assign(args, { [argument.substring(0, argument.indexOf('=')).toLowerCase()]: argument.substring(argument.indexOf('=') + 1).toUpperCase() })
+			else
+				throw 'illegalArgument'
 		}
 		return args
 	} catch (error) {

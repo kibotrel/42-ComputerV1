@@ -17,26 +17,47 @@ const parseArgs = ({ argv }) => {
 	const args = {}
 
 	argv.splice(0, 2)
-	try {
-		for (let argument of argv) {
-			if (argument.startsWith('-')) {
-				argument = argument.substring(1)
-				if (argument.match('^[a-zA-Z]+$'))
-					Object.assign(args, { [argument.toLowerCase()]: true })
-				else
-					throw 'illegalArgument'
-			} else if (argument.includes('=') && isValidVariable(argument))
-				Object.assign(args, { [argument.substring(0, argument.indexOf('=')).toLowerCase()]: argument.substring(argument.indexOf('=') + 1).toUpperCase() })
+	for (let argument of argv) {
+		if (argument.startsWith('-')) {
+			argument = argument.substring(1)
+			if (argument.match('^[a-zA-Z]+$'))
+				Object.assign(args, { [argument.toLowerCase()]: true })
 			else
-				throw 'illegalArgument'
-		}
-		return args
-	} catch (error) {
-		errorHandler(error)
+				errorHandler('illegalArgument')
+		} else if (argument.includes('=') && isValidVariable(argument))
+			Object.assign(args, { [argument.substring(0, argument.indexOf('=')).toLowerCase()]: argument.substring(argument.indexOf('=') + 1).toUpperCase() })
+		else
+			errorHandler('illegalArgument')
 	}
+	return args
+}
+
+const parsePolynom = (polynom) => {
+	if (polynom === '*')
+		errorHandler('badPolynom')
 }
 
 const parseEquation = ({ equation, verbose }) => {
+	equation = equation.replace(/\s+/g, '')
+	if (!equation.includes('='))
+		errorHandler('notEquation')
+	if (!equation.match('^[+-=*0-9X^]+$'))
+		errorHandler('forbiddenCharacters')
+	equation = equation.split('=')
+
+	const leftSide = equation[0].match(/[-+]?([0-9]*\.?[0-9]+)?(\*)?(X(\^[0-9]+)?)?/g)
+	const rightSide = equation[1].match(/[-+]?([0-9]*\.?[0-9]+)?(\*)?(X(\^[0-9]+)?)?/g)
+
+	leftSide.pop()
+	rightSide.pop()
+	for (const polynom of leftSide) {
+		const polynomInfos = parsePolynom(polynom)
+	}
+	for (const polynom of rightSide) {
+		const polynomInfos = parsePolynom(polynom)
+	}
+
+
 	return { degree: undefined, leftSide: undefined, rightSide: undefined}
 }
 

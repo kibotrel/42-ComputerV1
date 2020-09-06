@@ -72,7 +72,7 @@ const parsePolynomList = (equation) => {
 
 	equation = equation.split('=')
 	for (const side of equation) {
-		const groups = side.match(/([+-]?((\d+\.\d\*X\^\d+)|(\d+\*X\^\d+)|(\d+\.\d+X\^\d+)|(\d+X\^\d+)|(\d+\.\d+X)|(\d+X)|((?<!X|\^\d+)X\^\d+)|((?<!X|\^\d+)X)|((?<!X)\d\.\d+)|((?<!X)\d+)))+/g)
+		const groups = side.match(/([+-]?(((?<!X|\d)\d+\.\d\*X\^\d+)|((?<!X|\d)\d+\*X\^\d+)|((?<!X|\d)\d+\.\d+X\^\d+)|((?<!X|\d)\d+X\^\d+)|((?<!X|\d)\d+\.\d+X)|((?<!X|\d)\d+X)|((?<!X|\d)X\^\d+)|((?<!X|\d)X)|((?<!X|\d)\d\.\d+)|((?<!X|\d)\d+)))+/g)
 
 		if (groups.length !== 1 || groups[0].length !== side.length)
 			errorHandler('badPolynom')

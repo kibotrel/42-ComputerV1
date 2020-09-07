@@ -61,7 +61,7 @@ const parsePolynom = ({ polynom, side }) => {
 	else if (foundX)
 		factorString = factorString.substring(0, factorString.indexOf('X'))
 
-	polynomInfos.factor = parseFloat(factorString)
+	polynomInfos.factor = (factorString.length > 0 ? parseFloat(factorString) : 1)
 
 	return polynomInfos
 }

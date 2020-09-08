@@ -100,4 +100,13 @@ const badPolynom = `
   \x1b[2m-2.7 * X^4\x1b[0m or \x1b[2m-2.7X^4\x1b[0m
 `
 
-module.exports = { illegalArgument, usageMessage, notEquation, forbiddenCharacters, badPolynom }
+const forbiddenPrecision = `
+\x1b[31;1mBad precision:\x1b[0m the requested precision is not supported by the program.
+
+\x1b[1mExpected:\x1b[0m
+  The precision argument ranges from \x1b[1;33m0\x1b[0m to \x1b[33;1m12\x1b[0m. If not specified it is set to \x1b[33;1m6\x1b[0m.
+
+\x1b[1mExample:\x1b[0m
+  precision=\x1b[33;1m3\x1b[0m
+`
+module.exports = { illegalArgument, usageMessage, notEquation, forbiddenCharacters, badPolynom, forbiddenPrecision }

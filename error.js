@@ -3,6 +3,7 @@ const Messages = require('./messages.js')
 const ErrorDict = {
 	// Arguments
 	illegalArgument: Messages.illegalArgument,
+	forbiddenPrecision: Messages.forbiddenPrecision,
 	usageMessage: Messages.usageMessage,
 
 	// Equation

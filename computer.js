@@ -99,7 +99,7 @@ const solveEquation = ({ equation, args }) => {
 
 	console.log(`\x1b[1;4mPolynomial degree:\x1b[0m\n\n\tThis is a polynomial equation of degree \x1b[33;1m${degree}\x1b[0m.`)
 	if (degree > 2) {
-		console.log('\tUnfortunately, this software cannot solve\n\tpolynomial equations of degree higher than 2.')
+		console.log('\tUnfortunately, this software cannot solve\n\tpolynomial equations of degree higher than 2.\n')
 		process.exit()
 	}
 

@@ -21,7 +21,7 @@ const isValidVariable = (variableString) => {
 	const variableName = element[0]
 	const variableValue = element[1]
 
-	if (element.length === 2 || !variableName.match('^[a-zA-Z]+$') || !variableValue.length)
+	if (element.length < 2 || !variableName.match('^[a-zA-Z]+$') || !variableValue.length)
 		return false
 	else
 		return true
@@ -38,9 +38,17 @@ const argsSanitize = (args) => {
 		} else if (variableArray.includes(argument)) {
 			if (typeof args[argument] !== 'string')
 				errorHandler('illegalArgument')
-		} else {
+			if (argument === 'precision') {
+				if(!args[argument].match(/^\d+$/))
+					errorHandler('illegalArgument')
+				else {
+					args[argument] = parseInt(args[argument])
+					if (args[argument] > 12)
+						errorHandler('forbiddenPrecision')
+				}
+			}
+		} else
 			errorHandler('illegalArgument')
-		}
 	}
 	return args
 }

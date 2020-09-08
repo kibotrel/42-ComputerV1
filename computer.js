@@ -36,27 +36,29 @@ const reduceEquation = (polynomlist) => {
 	return reducedList
 }
 
-const solveSecondDegree = ({ a, b, c }) => {
+const solveQuadratic = ({ a, b, c }) => {
 	const discriminant = (b ** 2) - (4 * a * c)
 
 	if (discriminant > 0) {
 		const positiveRoot = parseFloat(Number((-b + discriminant ** 0.5) / (2 * a)).toFixed(6))
 		const negativeRoot = parseFloat(Number((-b - discriminant ** 0.5) / (2 * a)).toFixed(6))
-		console.log(`\tThe discriminant of this equation is strictly positive (\x1b[1;33m${discriminant}\x1b[0m), so this equation has two roots: \x1b[1;33m${negativeRoot} \x1b[0m and \x1b[1;33m${positiveRoot}\x1b[0m.\n`)
+		console.log(`\tThe discriminant of this equation is strictly positive (\x1b[1;33m${discriminant}\x1b[0m), so this equation has two roots: \x1b[1;33m${negativeRoot}\x1b[0m and \x1b[1;33m${positiveRoot}\x1b[0m.\n`)
 	} else if (discriminant === 0) {
 		const zeroRoot = parseFloat(Number(-b / (2 * a)).toFixed(6))
 		console.log(`\tThe discriminant of this equation is equal to 0, so this equation has a unique root: \x1b[1;33m${zeroRoot}\x1b[0m.\n`)
 	} else {
 		console.log(`\tThe discriminant of this equation is strictly negative (\x1b[33;1m${discriminant}\x1b[0m), so there is no real solution.\n`)
 	}
+	// const positiveComplexRoot = `(${-b} + i√${Math.abs(discriminant)}) / ${2 * a}`
+	// const negativeComplexRoot = `(${-b} - i√${Math.abs(discriminant)}) / ${2 * a}`
 }
 
-const solveFirstDegree = ({ b, c }) => {
+const solveLinear = ({ b, c }) => {
 	console.log(`\tThe solution to this equation is \x1b[1;33m${-c / b}\x1b[0m.\n`)
 
 }
 
-const solveZerothDegree = ({ c }) => {
+const solveConstant = ({ c }) => {
 	if (c === 0)
 		console.log('\t\x1b[33;1mℝ\x1b[0m, the set of real number is the solution to this equation.\n')
 	else
@@ -101,11 +103,11 @@ const solveEquation = ({ equation, verbose }) => {
 
 	console.log('\n\x1b[1;4mSolution(s):\x1b[0m\n')
 	if (degree === 2)
-		solveSecondDegree({ a, b, c })
+		solveQuadratic({ a, b, c })
 	else if (degree === 1)
-		solveFirstDegree({ b, c })
+		solveLinear({ b, c })
 	else
-		solveZerothDegree({ c })
+		solveConstant({ c })
 }
 
 const plotEquation = () =>  {

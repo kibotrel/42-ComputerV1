@@ -18,13 +18,11 @@ const reduceEquation = (polynomlist) => {
 		}
 	}
 	reducedList.sort((a, b) => (a.power < b.power ? 1 : -1))
-	if (reducedList.length > 1 && !reducedList[reducedList.length - 1].power && !reducedList[reducedList.length -1].factor)
-		reducedList.pop()
 
 	let firstPolynom = true
 
 	for (const polynom of reducedList) {
-		if (firstPolynom && (reducedList.length === 1 || polynom.factor !== 0)) {
+		if (firstPolynom && (reducedList.length === 1 || polynom.factor !== 0 || polynom.power === 0)) {
 			reducedEquation += (polynom.sign < 0 ? '-' : '')
 			reducedEquation += `${polynom.factor} * X^${polynom.power}`
 			firstPolynom = false
@@ -39,32 +37,48 @@ const reduceEquation = (polynomlist) => {
 }
 
 const solveSecondDegree = ({ a, b, c }) => {
-	console.log(2)
-	return undefined
+	const discriminant = (b ** 2) - (4 * a * c)
+
+	if (discriminant > 0) {
+		const positiveRoot = parseFloat(Number((-b + discriminant ** 0.5) / (2 * a)).toFixed(6))
+		const negativeRoot = parseFloat(Number((-b - discriminant ** 0.5) / (2 * a)).toFixed(6))
+		console.log(`\tThe discriminant of this equation is strictly positive (\x1b[1;33m${discriminant}\x1b[0m), so this equation has two roots: \x1b[1;33m${negativeRoot} \x1b[0m and \x1b[1;33m${positiveRoot}\x1b[0m.\n`)
+	} else if (discriminant === 0) {
+		const zeroRoot = parseFloat(Number(-b / (2 * a)).toFixed(6))
+		console.log(`\tThe discriminant of this equation is equal to 0, so this equation has a unique root: \x1b[1;33m${zeroRoot}\x1b[0m.\n`)
+	} else {
+		console.log(`\tThe discriminant of this equation is strictly negative (\x1b[33;1m${discriminant}\x1b[0m), so there is no real solution.\n`)
+	}
 }
 
 const solveFirstDegree = ({ b, c }) => {
-	console.log(1)
-	return undefined
+	console.log(`\tThe solution to this equation is \x1b[1;33m${-c / b}\x1b[0m.\n`)
+
 }
 
 const solveZerothDegree = ({ c }) => {
-	console.log('\n\x1b[1;4mSolution:\x1b[0m\n')
 	if (c === 0)
 		console.log('\t\x1b[33;1mℝ\x1b[0m, the set of real number is the solution to this equation.\n')
 	else
 		console.log('\tThis equation does not have any solution.\n')
-	return undefined
 }
 
 const getDegree = (polynomList) => {
-	if (polynomList.length === 1)
-		return polynomList[0].power
+	if (polynomList.length === 1) {
+		if (polynomList[0].power === 2) {
+			if (polynomList[0].factor !== 0) {
+				return 2
+			} else {
+				return 0
+			}
+		} else
+			return polynomList[0].power
+	}
 	for (polynom of polynomList) {
 		if (polynom.factor !== 0)
 			return polynom.power
 	}
-	return polynomList[0].power
+	return polynomList[polynomList.length - 1].power
 }
 
 const solveEquation = ({ equation, verbose }) => {
@@ -85,6 +99,7 @@ const solveEquation = ({ equation, verbose }) => {
 	const b = (foundB ? foundB.factor * foundB.sign : 0)
 	const c = (foundC ? foundC.factor * foundC.sign : 0)
 
+	console.log('\n\x1b[1;4mSolution(s):\x1b[0m\n')
 	if (degree === 2)
 		solveSecondDegree({ a, b, c })
 	else if (degree === 1)

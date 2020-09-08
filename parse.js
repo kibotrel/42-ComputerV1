@@ -1,13 +1,25 @@
 const { errorHandler } = require('./error.js')
 
+const trimFlagName = (flagString) => {
+	let hyphenCount = 0
+
+	for (character of flagString)
+		if (character === '-')
+			hyphenCount++
+		else
+			break
+	if (hyphenCount <= 2)
+		flagString = flagString.substring(hyphenCount)
+
+	return flagString
+}
+
 const isValidVariable = (variableString) => {
 	const element = variableString.split('=')
 	const variableName = element[0]
 	const variableValue = element[1]
 
-	if (!variableName.match('^[a-zA-Z]+$'))
-		return false
-	else if (!variableValue.length)
+	if (element.length === 2 || !variableName.match('^[a-zA-Z]+$') || !variableValue.length)
 		return false
 	else
 		return true
@@ -19,7 +31,7 @@ const parseArgs = ({ argv }) => {
 	argv.splice(0, 2)
 	for (let argument of argv) {
 		if (argument.startsWith('-')) {
-			argument = argument.substring(1)
+			argument = trimFlagName(argument)
 			if (argument.match('^[a-zA-Z]+$'))
 				Object.assign(args, { [argument.toLowerCase()]: true })
 			else

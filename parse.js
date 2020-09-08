@@ -10,6 +10,8 @@ const trimFlagName = (flagString) => {
 			break
 	if (hyphenCount <= 2)
 		flagString = flagString.substring(hyphenCount)
+	if (hyphenCount === 1 && flagString.length !== 1)
+		errorHandler('illegalArgument')
 
 	return flagString
 }

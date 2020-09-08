@@ -2,11 +2,11 @@ const illegalArgument = `
 \x1b[31;1mIllegal argument:\x1b[0m one ore more parameters in the command line are not well formated.
 
 \x1b[1mExpected:\x1b[0m
-  - flag     : -\x1b[1mflagName\x1b[0m
+  - flag     : \x1b[1m--flagName\x1b[0m or \x1b[1m-flagAlias\x1b[0m
   - variable : \x1b[1mvariableName\x1b[0m="\x1b[32;1mvariableValue\x1b[0m"
 
 \x1b[1mExamples:\x1b[0m
-  - flag     : \x1b[1m-help\x1b[0m
+  - flag     : \x1b[1m--help\x1b[0m or \x1b[1m-h\x1b[0m
   - variable : \x1b[1mequation\x1b[0m="\x1b[32;1m1 * X^2 + 2 * X^1 = 9 X^0\x1b[0m"
 
 `

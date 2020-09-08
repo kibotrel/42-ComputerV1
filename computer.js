@@ -1,8 +1,9 @@
 const { parseEquation } = require('./parse.js')
 
-const reduceEquation = (polynomlist) => {
+const reduceEquation = ({ polynomlist, args }) => {
 	let reducedList = []
 	let	reducedEquation = ''
+	const naturalFlag = (args.n || args.natural ? true : false)
 
 	for (const polynom of polynomlist) {
 		const found = reducedList.find((element) => element.power === polynom.power)
@@ -24,12 +25,20 @@ const reduceEquation = (polynomlist) => {
 	for (const polynom of reducedList) {
 		if (firstPolynom && (reducedList.length === 1 || polynom.factor !== 0 || polynom.power === 0)) {
 			reducedEquation += (polynom.sign < 0 ? '-' : '')
-			reducedEquation += `${polynom.factor} * X^${polynom.power}`
+			if (naturalFlag)
+				reducedEquation += `${polynom.factor !== 1 ? polynom.factor : ''}${polynom.power ? 'X' : ''}${polynom.power > 1 ? `^${polynom.power}` : ''}`
+			else
+				reducedEquation += `${polynom.factor} * X^${polynom.power}`
 			firstPolynom = false
 			continue
 		}
-		if (polynom.factor !== 0)
-			reducedEquation += ` ${polynom.sign < 0 ? '-' : '+'} ${polynom.factor} * X^${polynom.power}`
+		if (polynom.factor !== 0) {
+			reducedEquation += (polynom.sign < 0 ? ' -' : ' +')
+			if (naturalFlag)
+				reducedEquation += ` ${polynom.factor !== 1 ? polynom.factor : ''}${polynom.power ? 'X' : ''}${polynom.power > 1 ? `^${polynom.power}` : ''}`
+			else
+				reducedEquation += ` ${polynom.factor} * X^${polynom.power}`
+		}
 	}
 	reducedEquation += ' = 0'
 	console.log(`\n\x1b[1;4mReduced form:\x1b[0m\n\n\t\x1b[33;1m${reducedEquation}\x1b[0m\n`)
@@ -83,9 +92,9 @@ const getDegree = (polynomList) => {
 	return polynomList[polynomList.length - 1].power
 }
 
-const solveEquation = ({ equation, verbose }) => {
-	const polynomlist = parseEquation({ equation, verbose })
-	const reducedList = reduceEquation(polynomlist)
+const solveEquation = ({ equation, args }) => {
+	const polynomlist = parseEquation({ equation, args })
+	const reducedList = reduceEquation({ polynomlist, args })
 	const degree = getDegree(reducedList)
 
 	console.log(`\x1b[1;4mPolynomial degree:\x1b[0m\n\n\tThis is a polynomial equation of degree \x1b[33;1m${degree}\x1b[0m.`)

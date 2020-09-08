@@ -46,21 +46,24 @@ const reduceEquation = ({ polynomlist, args }) => {
 }
 
 const solveQuadratic = ({ a, b, c, args }) => {
-	const discriminant = (b ** 2) - (4 * a * c)
+	const complexFlag = (args.c || args.complex ? true : false)
 	const precision = (typeof args.precision !== 'undefined' ? args.precision : 6)
+	const discriminant = parseFloat(Number((b ** 2) - (4 * a * c)).toFixed(precision))
 
 	if (discriminant > 0) {
 		const positiveRoot = parseFloat(Number((-b + discriminant ** 0.5) / (2 * a)).toFixed(precision))
 		const negativeRoot = parseFloat(Number((-b - discriminant ** 0.5) / (2 * a)).toFixed(precision))
-		console.log(`\tThe discriminant of this equation is strictly positive (\x1b[1;33m${discriminant}\x1b[0m), so this equation has two roots: \x1b[1;33m${negativeRoot}\x1b[0m and \x1b[1;33m${positiveRoot}\x1b[0m.\n`)
+		console.log(`\tThe discriminant of this equation is strictly positive (\x1b[1;33m${discriminant}\x1b[0m), so this equation has two real roots: \x1b[1;33m${negativeRoot}\x1b[0m and \x1b[1;33m${positiveRoot}\x1b[0m.\n`)
 	} else if (discriminant === 0) {
 		const zeroRoot = parseFloat(Number(-b / (2 * a)).toFixed(precision))
-		console.log(`\tThe discriminant of this equation is equal to 0, so this equation has a unique root: \x1b[1;33m${zeroRoot}\x1b[0m.\n`)
+		console.log(`\tThe discriminant of this equation is equal to 0, so this equation has a unique real root: \x1b[1;33m${zeroRoot}\x1b[0m.\n`)
+	} else if (complexFlag) {
+		let positiveComplexRoot = `(${-b} + ${parseFloat(Math.sqrt(Math.abs(discriminant)).toFixed(precision))}i) / ${parseFloat(Number(2 * a).toFixed(precision))}`
+		let negativeComplexRoot = `(${-b} - ${parseFloat(Math.sqrt(Math.abs(discriminant)).toFixed(precision))}i) / ${parseFloat(Number(2 * a).toFixed(precision))}`
+		console.log(`\tThe discriminant of this equation is stricly negative (\x1b[1;33m${discriminant}\x1b[0m), so this equation has two complex roots: \x1b[1;33m${positiveComplexRoot}\x1b[0m and \x1b[1;33m${negativeComplexRoot}\x1b[0m.\n`)
 	} else {
 		console.log(`\tThe discriminant of this equation is strictly negative (\x1b[33;1m${discriminant}\x1b[0m), so there is no real solution.\n`)
 	}
-	// const positiveComplexRoot = `(${-b} + i√${Math.abs(discriminant)}) / ${2 * a}`
-	// const negativeComplexRoot = `(${-b} - i√${Math.abs(discriminant)}) / ${2 * a}`
 }
 
 const solveLinear = ({ b, c, args }) => {

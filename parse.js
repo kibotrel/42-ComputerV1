@@ -27,6 +27,24 @@ const isValidVariable = (variableString) => {
 		return true
 }
 
+const argsSanitize = (args) => {
+	const flagArray = ['complex', 'c', 'fraction', 'f', 'graph', 'g', 'h', 'help', 'natural', 'n', 'pretty', 'p', 'verbose', 'v']
+	const variableArray = ['equation', 'precision']
+
+	for (const argument in args) {
+		if (flagArray.includes(argument)) {
+			if (typeof args[argument] !== 'boolean')
+				errorHandler('illegalArgument')
+		} else if (variableArray.includes(argument)) {
+			if (typeof args[argument] !== 'string')
+				errorHandler('illegalArgument')
+		} else {
+			errorHandler('illegalArgument')
+		}
+	}
+	return args
+}
+
 const parseArgs = ({ argv }) => {
 	const args = {}
 
@@ -43,7 +61,7 @@ const parseArgs = ({ argv }) => {
 		else
 			errorHandler('illegalArgument')
 	}
-	return args
+	return argsSanitize(args)
 }
 
 const parsePolynom = ({ polynom, side }) => {

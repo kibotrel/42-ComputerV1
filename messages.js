@@ -1,5 +1,5 @@
 const illegalArgument = `
-\x1b[31;1mIllegal argument:\x1b[0m one ore more parameters in the command line are not well formated.
+\x1b[31;1mIllegal argument:\x1b[0m one ore more parameters in the command line are either not well formated or unsupported.
 
 \x1b[1mExpected:\x1b[0m
   - flag     : \x1b[1m--flagName\x1b[0m or \x1b[1m-flagAlias\x1b[0m

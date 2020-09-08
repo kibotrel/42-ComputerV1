@@ -15,7 +15,7 @@ const reduceEquation = ({ polynomlist, args }) => {
 		else {
 			found.factor = found.sign * found.factor + polynom.sign * polynom.factor
 			found.sign = (found.factor >= 0 ? 1 : -1)
-			found.factor = parseFloat(Math.abs(found.factor).toFixed(6))
+			found.factor = Math.abs(found.factor)
 		}
 	}
 	reducedList.sort((a, b) => (a.power < b.power ? 1 : -1))
@@ -26,7 +26,7 @@ const reduceEquation = ({ polynomlist, args }) => {
 		if (firstPolynom && (reducedList.length === 1 || polynom.factor !== 0 || polynom.power === 0)) {
 			reducedEquation += (polynom.sign < 0 ? '-' : '')
 			if (naturalFlag)
-				reducedEquation += `${polynom.factor !== 1 ? polynom.factor : ''}${polynom.power ? 'X' : ''}${polynom.power > 1 ? `^${polynom.power}` : ''}`
+				reducedEquation += `${polynom.factor !== 1 || polynom.power === 0 ? polynom.factor : ''}${polynom.power ? 'X' : ''}${polynom.power > 1 ? `^${polynom.power}` : ''}`
 			else
 				reducedEquation += `${polynom.factor} * X^${polynom.power}`
 			firstPolynom = false
@@ -35,7 +35,7 @@ const reduceEquation = ({ polynomlist, args }) => {
 		if (polynom.factor !== 0) {
 			reducedEquation += (polynom.sign < 0 ? ' -' : ' +')
 			if (naturalFlag)
-				reducedEquation += ` ${polynom.factor !== 1 ? polynom.factor : ''}${polynom.power ? 'X' : ''}${polynom.power > 1 ? `^${polynom.power}` : ''}`
+				reducedEquation += ` ${polynom.factor !== 1 || polynom.power === 0 ? polynom.factor :  ''}${polynom.power ? 'X' : ''}${polynom.power > 1 ? `^${polynom.power}` : ''}`
 			else
 				reducedEquation += ` ${polynom.factor} * X^${polynom.power}`
 		}
@@ -45,15 +45,16 @@ const reduceEquation = ({ polynomlist, args }) => {
 	return reducedList
 }
 
-const solveQuadratic = ({ a, b, c }) => {
+const solveQuadratic = ({ a, b, c, args }) => {
 	const discriminant = (b ** 2) - (4 * a * c)
+	const precision = (typeof args.precision !== 'undefined' ? args.precision : 6)
 
 	if (discriminant > 0) {
-		const positiveRoot = parseFloat(Number((-b + discriminant ** 0.5) / (2 * a)).toFixed(6))
-		const negativeRoot = parseFloat(Number((-b - discriminant ** 0.5) / (2 * a)).toFixed(6))
+		const positiveRoot = parseFloat(Number((-b + discriminant ** 0.5) / (2 * a)).toFixed(precision))
+		const negativeRoot = parseFloat(Number((-b - discriminant ** 0.5) / (2 * a)).toFixed(precision))
 		console.log(`\tThe discriminant of this equation is strictly positive (\x1b[1;33m${discriminant}\x1b[0m), so this equation has two roots: \x1b[1;33m${negativeRoot}\x1b[0m and \x1b[1;33m${positiveRoot}\x1b[0m.\n`)
 	} else if (discriminant === 0) {
-		const zeroRoot = parseFloat(Number(-b / (2 * a)).toFixed(6))
+		const zeroRoot = parseFloat(Number(-b / (2 * a)).toFixed(precision))
 		console.log(`\tThe discriminant of this equation is equal to 0, so this equation has a unique root: \x1b[1;33m${zeroRoot}\x1b[0m.\n`)
 	} else {
 		console.log(`\tThe discriminant of this equation is strictly negative (\x1b[33;1m${discriminant}\x1b[0m), so there is no real solution.\n`)
@@ -62,8 +63,11 @@ const solveQuadratic = ({ a, b, c }) => {
 	// const negativeComplexRoot = `(${-b} - i√${Math.abs(discriminant)}) / ${2 * a}`
 }
 
-const solveLinear = ({ b, c }) => {
-	console.log(`\tThe solution to this equation is \x1b[1;33m${-c / b}\x1b[0m.\n`)
+const solveLinear = ({ b, c, args }) => {
+	const precision = (typeof args.precision !== 'undefined' ? args.precision : 6)
+	const root = parseFloat(Number(-c / b).toFixed(precision))
+
+	console.log(`\tThe solution to this equation is \x1b[1;33m${root}\x1b[0m.\n`)
 
 }
 
@@ -98,25 +102,24 @@ const solveEquation = ({ equation, args }) => {
 	const degree = getDegree(reducedList)
 
 	console.log(`\x1b[1;4mPolynomial degree:\x1b[0m\n\n\tThis is a polynomial equation of degree \x1b[33;1m${degree}\x1b[0m.`)
-	if (degree > 2) {
+	if (degree > 2)
 		console.log('\tUnfortunately, this software cannot solve\n\tpolynomial equations of degree higher than 2.\n')
-		process.exit()
+	else {
+		const foundA = reducedList.filter((element) => {return element.power === 2})[0]
+		const foundB = reducedList.filter((element) => {return element.power === 1})[0]
+		const foundC = reducedList.filter((element) => {return element.power === 0})[0]
+		const a = (foundA ? foundA.factor * foundA.sign : 0)
+		const b = (foundB ? foundB.factor * foundB.sign : 0)
+		const c = (foundC ? foundC.factor * foundC.sign : 0)
+
+		console.log('\n\x1b[1;4mSolution(s):\x1b[0m\n')
+		if (degree === 2)
+			solveQuadratic({ a, b, c, args })
+		else if (degree === 1)
+			solveLinear({ b, c, args})
+		else
+			solveConstant({ c })
 	}
-
-	const foundA = reducedList.filter((element) => {return element.power === 2})[0]
-	const foundB = reducedList.filter((element) => {return element.power === 1})[0]
-	const foundC = reducedList.filter((element) => {return element.power === 0})[0]
-	const a = (foundA ? foundA.factor * foundA.sign : 0)
-	const b = (foundB ? foundB.factor * foundB.sign : 0)
-	const c = (foundC ? foundC.factor * foundC.sign : 0)
-
-	console.log('\n\x1b[1;4mSolution(s):\x1b[0m\n')
-	if (degree === 2)
-		solveQuadratic({ a, b, c })
-	else if (degree === 1)
-		solveLinear({ b, c })
-	else
-		solveConstant({ c })
 }
 
 const plotEquation = () =>  {

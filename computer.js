@@ -4,6 +4,7 @@ const reduceEquation = ({ polynomlist, args }) => {
 	let reducedList = []
 	let	reducedEquation = ''
 	const naturalFlag = (args.n || args.natural ? true : false)
+	const prettyFlag = (args.p || args.pretty ? true : false)
 
 	for (const polynom of polynomlist) {
 		const found = reducedList.find((element) => element.power === polynom.power)
@@ -41,44 +42,75 @@ const reduceEquation = ({ polynomlist, args }) => {
 		}
 	}
 	reducedEquation += ' = 0'
-	console.log(`\n\x1b[1;4mReduced form:\x1b[0m\n\n\t\x1b[33;1m${reducedEquation}\x1b[0m\n`)
+	if (prettyFlag)
+		console.log(`\n\x1b[1;4mReduced form:\x1b[0m\n\n\t\x1b[33;1m${reducedEquation}\x1b[0m\n`)
+	else
+		console.log(`Reduced form: ${reducedEquation}`)
 	return reducedList
 }
 
 const solveQuadratic = ({ a, b, c, args }) => {
 	const complexFlag = (args.c || args.complex ? true : false)
+	const prettyFlag = (args.p || args.pretty ? true : false)
 	const precision = (typeof args.precision !== 'undefined' ? args.precision : 6)
 	const discriminant = parseFloat(Number((b ** 2) - (4 * a * c)).toFixed(precision))
 
 	if (discriminant > 0) {
 		const positiveRoot = parseFloat(Number((-b + discriminant ** 0.5) / (2 * a)).toFixed(precision))
 		const negativeRoot = parseFloat(Number((-b - discriminant ** 0.5) / (2 * a)).toFixed(precision))
-		console.log(`\tThe discriminant of this equation is strictly positive (\x1b[1;33m${discriminant}\x1b[0m), so this equation has two real roots: \x1b[1;33m${negativeRoot}\x1b[0m and \x1b[1;33m${positiveRoot}\x1b[0m.\n`)
+
+		if (prettyFlag)
+			console.log(`\tThe discriminant of this equation is strictly positive (\x1b[1;33m${discriminant}\x1b[0m).\n\tSo it has two real roots: \x1b[1;33m${negativeRoot}\x1b[0m and \x1b[1;33m${positiveRoot}\x1b[0m.\n`)
+		else
+			console.log(`Discriminant is strictly positive, the two solutions are:\n${positiveRoot}\n${negativeRoot}`)
 	} else if (discriminant === 0) {
 		const zeroRoot = parseFloat(Number(-b / (2 * a)).toFixed(precision))
-		console.log(`\tThe discriminant of this equation is equal to 0, so this equation has a unique real root: \x1b[1;33m${zeroRoot}\x1b[0m.\n`)
+
+		if (prettyFlag)
+			console.log(`\tThe discriminant of this equation is equal to \x1b[33;1m0\x1b[0m.\n\tSo it has a unique real root: \x1b[1;33m${zeroRoot}\x1b[0m.\n`)
+		else
+			console.log(`Discriminant is equal to 0, the only solution is:\n${zeroRoot}`)
 	} else if (complexFlag) {
-		let positiveComplexRoot = `(${-b} + ${parseFloat(Math.sqrt(Math.abs(discriminant)).toFixed(precision))}i) / ${parseFloat(Number(2 * a).toFixed(precision))}`
-		let negativeComplexRoot = `(${-b} - ${parseFloat(Math.sqrt(Math.abs(discriminant)).toFixed(precision))}i) / ${parseFloat(Number(2 * a).toFixed(precision))}`
-		console.log(`\tThe discriminant of this equation is stricly negative (\x1b[1;33m${discriminant}\x1b[0m), so this equation has two complex roots: \x1b[1;33m${positiveComplexRoot}\x1b[0m and \x1b[1;33m${negativeComplexRoot}\x1b[0m.\n`)
+		const positiveComplexRoot = `(${-b} + ${parseFloat(Math.sqrt(Math.abs(discriminant)).toFixed(precision))} * i) / ${parseFloat(Number(2 * a).toFixed(precision))}`
+		const negativeComplexRoot = `(${-b} - ${parseFloat(Math.sqrt(Math.abs(discriminant)).toFixed(precision))} * i) / ${parseFloat(Number(2 * a).toFixed(precision))}`
+
+		if (prettyFlag)
+			console.log(`\tThe discriminant of this equation is stricly negative (\x1b[1;33m${discriminant}\x1b[0m).\n\tIt has two complex roots: \x1b[1;33m${positiveComplexRoot}\x1b[0m and \x1b[1;33m${negativeComplexRoot}\x1b[0m.\n`)
+		else
+			console.log(`Discriminant is strictly negative, the two solutions are:\n${positiveComplexRoot}\n${negativeComplexRoot}`)
 	} else {
-		console.log(`\tThe discriminant of this equation is strictly negative (\x1b[33;1m${discriminant}\x1b[0m), so there is no real solution.\n`)
+		if (prettyFlag)
+			console.log(`\tThe discriminant of this equation is strictly negative (\x1b[33;1m${discriminant}\x1b[0m).\n\tIt has no real solution.\n`)
+		else
+			console.log('Discriminant is strictly negative, so there is no real solution.')
 	}
 }
 
 const solveLinear = ({ b, c, args }) => {
 	const precision = (typeof args.precision !== 'undefined' ? args.precision : 6)
 	const root = parseFloat(Number(-c / b).toFixed(precision))
+	const prettyFlag = (args.p || args.pretty ? true : false)
 
-	console.log(`\tThe solution to this equation is \x1b[1;33m${root}\x1b[0m.\n`)
-
+	if (prettyFlag)
+		console.log(`\tThe solution to this equation is \x1b[1;33m${root}\x1b[0m.\n`)
+	else
+		console.log(`The solution is:\n${root}`)
 }
 
-const solveConstant = ({ c }) => {
-	if (c === 0)
-		console.log('\t\x1b[33;1mℝ\x1b[0m, the set of real number is the solution to this equation.\n')
-	else
-		console.log('\tThis equation does not have any solution.\n')
+const solveConstant = ({ c, args }) => {
+	const prettyFlag = (args.p || args.pretty ? true : false)
+
+	if (c === 0) {
+		if (prettyFlag)
+			console.log('\t\x1b[33;1mℝ\x1b[0m, the set of real number is the solution to this equation.\n')
+		else
+			console.log('The solution is:\nℝ, the set of real number.')
+	} else {
+		if (prettyFlag)
+			console.log('\tThis equation does not have any solution.\n')
+		else
+			console.log('There is no solution.')
+	}
 }
 
 const getDegree = (polynomList) => {
@@ -102,11 +134,19 @@ const getDegree = (polynomList) => {
 const solveEquation = ({ equation, args }) => {
 	const polynomlist = parseEquation({ equation, args })
 	const reducedList = reduceEquation({ polynomlist, args })
+	const prettyFlag = (args.p || args.pretty ? true : false)
 	const degree = getDegree(reducedList)
 
-	console.log(`\x1b[1;4mPolynomial degree:\x1b[0m\n\n\tThis is a polynomial equation of degree \x1b[33;1m${degree}\x1b[0m.`)
-	if (degree > 2)
-		console.log('\tUnfortunately, this software cannot solve\n\tpolynomial equations of degree higher than 2.\n')
+	if (prettyFlag)
+		console.log(`\x1b[1;4mPolynomial degree:\x1b[0m\n\n\tThis is a polynomial equation of degree \x1b[33;1m${degree}\x1b[0m.`)
+	else
+		console.log(`Polynomial degree: ${degree}`)
+	if (degree > 2) {
+		if (prettyFlag)
+			console.log('\tUnfortunately, this software cannot solve\n\tpolynomial equations of degree higher than 2.\n')
+		else
+			console.log('The polynomial degree is stricly greater than 2, I can\'t solve.')
+	}
 	else {
 		const foundA = reducedList.filter((element) => {return element.power === 2})[0]
 		const foundB = reducedList.filter((element) => {return element.power === 1})[0]
@@ -114,14 +154,14 @@ const solveEquation = ({ equation, args }) => {
 		const a = (foundA ? foundA.factor * foundA.sign : 0)
 		const b = (foundB ? foundB.factor * foundB.sign : 0)
 		const c = (foundC ? foundC.factor * foundC.sign : 0)
-
-		console.log('\n\x1b[1;4mSolution(s):\x1b[0m\n')
+		if (prettyFlag)
+			console.log('\n\x1b[1;4mSolution(s):\x1b[0m\n')
 		if (degree === 2)
 			solveQuadratic({ a, b, c, args })
 		else if (degree === 1)
 			solveLinear({ b, c, args})
 		else
-			solveConstant({ c })
+			solveConstant({ c, args })
 	}
 }
 

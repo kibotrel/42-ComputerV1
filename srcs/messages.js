@@ -13,7 +13,7 @@ const illegalArgument = `
 
 const usageMessage = `
 \x1b[1mUsage:\x1b[0m
-  node app.js [\x1b[1m-cfgnpv\x1b[0m][\x1b[1m-h\x1b[0m] \x1b[1mequation\x1b[0m="<\x1b[32;1mequation\x1b[0m>" [\x1b[1mprecision\x1b[0m="<\x1b[32;1mnumberOfDecimals\x1b[0m>"]
+  node computor.js [\x1b[1m-cfgnpv\x1b[0m][\x1b[1m-h\x1b[0m] \x1b[1mequation\x1b[0m="<\x1b[32;1mequation\x1b[0m>" [\x1b[1mprecision\x1b[0m="<\x1b[32;1mnumberOfDecimals\x1b[0m>"]
 
 \x1b[1mArguments:
   - Flags:\x1b[0m

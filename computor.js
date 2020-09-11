@@ -1,6 +1,6 @@
-const { solveEquation, plotEquation } = require('./computer.js')
-const { parseArgs } = require('./parse.js')
-const { errorHandler } = require('./error.js')
+const { solveEquation, plotEquation } = require('./srcs/solve.js')
+const { parseArgs } = require('./srcs/parse.js')
+const { errorHandler } = require('./srcs/error.js')
 
 const args = parseArgs({ argv: process.argv })
 

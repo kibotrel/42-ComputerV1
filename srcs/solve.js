@@ -154,6 +154,7 @@ const solveEquation = ({ equation, args }) => {
 		const a = (foundA ? foundA.factor * foundA.sign : 0)
 		const b = (foundB ? foundB.factor * foundB.sign : 0)
 		const c = (foundC ? foundC.factor * foundC.sign : 0)
+
 		if (prettyFlag)
 			console.log('\n\x1b[1;4mSolution(s):\x1b[0m\n')
 		if (degree === 2)

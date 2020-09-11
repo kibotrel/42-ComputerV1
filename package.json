@@ -2,7 +2,7 @@
   "name": "42-computerv1",
   "version": "1.0.0",
   "description": "Small quadratic equations solver",
-  "main": "app.js",
+  "main": "computor.js",
   "dependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

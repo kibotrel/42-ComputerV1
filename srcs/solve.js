@@ -76,10 +76,18 @@ const solveQuadratic = ({ a, b, c, args }) => {
 	const complexFlag = (args.c || args.complex ? true : false)
 	const prettyFlag = (args.p || args.pretty ? true : false)
 	const fractionFlag = (args.f || args.fraction ? true : false)
+	const verboseFlag = (args.v || args.verbose ? true : false)
 	const precision = (typeof args.precision !== 'undefined' ? args.precision : 6)
 	const discriminant = parseFloat(Number((b ** 2) - (4 * a * c)).toFixed(precision))
-
 	let discriminantPrint = (fractionFlag ? computeFraction(discriminant) : discriminant)
+
+	if (verboseFlag) {
+		if (prettyFlag)
+			console.log(`\t\x1b[2mVariables:\n\n\t\ta = ${a}, b = ${b}, c = ${c}, Δ = ${discriminantPrint}\x1b[0m\n`)
+		else
+			console.log(`\na = ${a}\nb = ${b}\nc = ${c}\nΔ = ${discriminantPrint}\n`)
+	}
+
 	if (discriminant > 0) {
 		let positiveRoot = parseFloat(Number((-b + discriminant ** 0.5) / (2 * a)).toFixed(precision))
 		let negativeRoot = parseFloat(Number((-b - discriminant ** 0.5) / (2 * a)).toFixed(precision))
@@ -88,8 +96,14 @@ const solveQuadratic = ({ a, b, c, args }) => {
 			positiveRoot = computeFraction(positiveRoot)
 			negativeRoot = computeFraction(negativeRoot)
 		}
+		if (verboseFlag) {
+			if (prettyFlag)
+				console.log(`\t\x1b[2mResolution:\n\n\t\tx'= (-b + √Δ) / 2 * a\n\t\tx'= (${-b} + ${discriminant ** 0.5}) / ${2 * a}\n\t\t\x1b[2;4mx'= ${positiveRoot}\x1b[0;2m\n\n\t\tx"= (-b - √Δ) / 2 * a\n\t\tx"= (${-b} - ${discriminant ** 0.5}) / ${2 * a}\n\t\t\x1b[2;4mx"= ${negativeRoot}\x1b[0m\n`)
+			else
+				console.log(`x'= (-b + √Δ) / 2a\nx'= (${-b} + ${discriminant ** 0.5}) / ${2 * a}\nx'= ${positiveRoot}\n\nx"= (-b - √Δ) / 2a\nx"= (${-b} - ${discriminant ** 0.5}) / ${2 * a}\nx"= ${negativeRoot}\n`)
+		}
 		if (prettyFlag)
-			console.log(`\tThe discriminant of this equation is strictly positive (\x1b[1;33m${discriminantPrint}\x1b[0m).\n\tSo it has two real roots: \x1b[1;33m${negativeRoot}\x1b[0m and \x1b[1;33m${positiveRoot}\x1b[0m.\n`)
+			console.log(`\tThe discriminant of this equation is strictly positive (\x1b[1;33m${discriminantPrint}\x1b[0m).\n\tSo it has two real roots: \x1b[1;33m${positiveRoot}\x1b[0m and \x1b[1;33m${negativeRoot}\x1b[0m.\n`)
 		else
 			console.log(`Discriminant is strictly positive, the two solutions are:\n${positiveRoot}\n${negativeRoot}`)
 	} else if (discriminant === 0) {
@@ -97,6 +111,12 @@ const solveQuadratic = ({ a, b, c, args }) => {
 
 		if (fractionFlag)
 			zeroRoot = computeFraction(zeroRoot)
+		if (verboseFlag) {
+			if (prettyFlag)
+				console.log(`\t\x1b[2mResolution:\n\n\t\tx = -b / 2a\n\t\tx = ${-b} / ${2 * a}\n\t\t\x1b[4mx = ${zeroRoot}\x1b[0m\n`)
+			else
+				console.log(`x = -b / 2a\nx = ${-b} / ${2 * a}\nx = ${zeroRoot}\n`)
+		}
 		if (prettyFlag)
 			console.log(`\tThe discriminant of this equation is equal to \x1b[33;1m0\x1b[0m.\n\tSo it has a unique real root: \x1b[1;33m${zeroRoot}\x1b[0m.\n`)
 		else
@@ -110,10 +130,16 @@ const solveQuadratic = ({ a, b, c, args }) => {
 		const positiveComplexRoot = `(${-b} + ${absoluteDiscriminant} * i) / ${parseFloat(Number(2 * a).toFixed(precision))}`
 		const negativeComplexRoot = `(${-b} - ${absoluteDiscriminant} * i) / ${parseFloat(Number(2 * a).toFixed(precision))}`
 
+		if (verboseFlag) {
+			if (prettyFlag)
+				console.log(`\t\x1b[2mResolution:\n\n\t\tz' = (-b - √|Δ| * i) / 2a\n\t\t\x1b[4mz' = (${-b} - ${absoluteDiscriminant} * i) / ${2 * a}\x1b[0;2m\n\n\t\tz" = (-b + √|Δ| * i) / 2a\n\t\t\x1b[4mz" = (${-b} + ${absoluteDiscriminant} * i) / ${2 * a}\x1b[0m\n`)
+			else
+				console.log(`z' = (-b - √|Δ| * i) / 2a\nz' = (${-b} - ${absoluteDiscriminant} * i) / ${2 * a}\n\nz" = (-b + √|Δ| * i) / 2a\nz" = (${-b} + ${absoluteDiscriminant} * i) / ${2 * a}\n`)
+		}
 		if (prettyFlag)
 			console.log(`\tThe discriminant of this equation is stricly negative (\x1b[1;33m${discriminantPrint}\x1b[0m).\n\tIt has two complex roots: \x1b[1;33m${positiveComplexRoot}\x1b[0m and \x1b[1;33m${negativeComplexRoot}\x1b[0m.\n`)
 		else
-			console.log(`Discriminant is strictly negative, the two solutions are:\n${positiveComplexRoot}\n${negativeComplexRoot}`)
+			console.log(`Discriminant is strictly negative, the two solutions are:\n${negativeComplexRoot}\n${positiveComplexRoot}`)
 	} else {
 		if (prettyFlag)
 			console.log(`\tThe discriminant of this equation is strictly negative (\x1b[33;1m${discriminant}\x1b[0m).\n\tIt has no real solution.\n`)
@@ -125,9 +151,16 @@ const solveQuadratic = ({ a, b, c, args }) => {
 const solveLinear = ({ b, c, args }) => {
 	const prettyFlag = (args.p || args.pretty ? true : false)
 	const fractionFlag = (args.f || args.fraction ? true : false)
+	const verboseFlag = (args.v || args.verbose ? true : false)
 	const precision = (typeof args.precision !== 'undefined' ? args.precision : 6)
 	let root = parseFloat(Number(-c / b).toFixed(precision))
 
+	if (verboseFlag) {
+		if (prettyFlag)
+			console.log(`\t\x1b[2mVariables:\n\n\t\ta = ${b}, b = ${c}\n\n\tResolution:\n\n\t\tx = -a / b\n\t\tx = ${-c} / ${b}\n\t\t\x1b[4mx = ${root}\n\x1b[0m`)
+		else
+			console.log(`\na = ${b}\nb = ${c}\n\nx = -a / b\nx = ${-c} / ${b}\nx = ${root}\n`)
+	}
 	if (fractionFlag)
 		root = computeFraction(root)
 	if (prettyFlag)

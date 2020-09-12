@@ -1,5 +1,28 @@
 const { parseEquation } = require('./parse.js')
 
+const computeFraction = (originalValue) => {
+	let value = originalValue
+	let roundedValue = Math.floor(value)
+	let temporaryNumerator1 = 1
+	let temporaryDenominator1 = 0
+	let numerator = roundedValue
+	let denominator = 1
+	const precision = 1.0E-15
+
+	while (value - roundedValue > precision * (denominator * denominator)) {
+		const  temporaryNumerator2 = temporaryNumerator1
+		const  temporaryDenominator2 = temporaryDenominator1
+
+		value = 1 / (value - roundedValue)
+		roundedValue = Math.floor(value)
+		temporaryNumerator1 = numerator
+		temporaryDenominator1 = denominator
+		numerator = temporaryNumerator2 + roundedValue * temporaryNumerator1
+		denominator = temporaryDenominator2 + roundedValue * temporaryDenominator1
+	}
+	return denominator === 1 ? `${numerator}` : `${numerator}/${denominator}`
+}
+
 const reduceEquation = ({ polynomlist, args }) => {
 	let reducedList = []
 	let	reducedEquation = ''
@@ -52,30 +75,43 @@ const reduceEquation = ({ polynomlist, args }) => {
 const solveQuadratic = ({ a, b, c, args }) => {
 	const complexFlag = (args.c || args.complex ? true : false)
 	const prettyFlag = (args.p || args.pretty ? true : false)
+	const fractionFlag = (args.f || args.fraction ? true : false)
 	const precision = (typeof args.precision !== 'undefined' ? args.precision : 6)
 	const discriminant = parseFloat(Number((b ** 2) - (4 * a * c)).toFixed(precision))
 
+	let discriminantPrint = (fractionFlag ? computeFraction(discriminant) : discriminant)
 	if (discriminant > 0) {
-		const positiveRoot = parseFloat(Number((-b + discriminant ** 0.5) / (2 * a)).toFixed(precision))
-		const negativeRoot = parseFloat(Number((-b - discriminant ** 0.5) / (2 * a)).toFixed(precision))
+		let positiveRoot = parseFloat(Number((-b + discriminant ** 0.5) / (2 * a)).toFixed(precision))
+		let negativeRoot = parseFloat(Number((-b - discriminant ** 0.5) / (2 * a)).toFixed(precision))
 
+		if (fractionFlag) {
+			positiveRoot = computeFraction(positiveRoot)
+			negativeRoot = computeFraction(negativeRoot)
+		}
 		if (prettyFlag)
-			console.log(`\tThe discriminant of this equation is strictly positive (\x1b[1;33m${discriminant}\x1b[0m).\n\tSo it has two real roots: \x1b[1;33m${negativeRoot}\x1b[0m and \x1b[1;33m${positiveRoot}\x1b[0m.\n`)
+			console.log(`\tThe discriminant of this equation is strictly positive (\x1b[1;33m${discriminantPrint}\x1b[0m).\n\tSo it has two real roots: \x1b[1;33m${negativeRoot}\x1b[0m and \x1b[1;33m${positiveRoot}\x1b[0m.\n`)
 		else
 			console.log(`Discriminant is strictly positive, the two solutions are:\n${positiveRoot}\n${negativeRoot}`)
 	} else if (discriminant === 0) {
-		const zeroRoot = parseFloat(Number(-b / (2 * a)).toFixed(precision))
+		let zeroRoot = parseFloat(Number(-b / (2 * a)).toFixed(precision))
 
+		if (fractionFlag)
+			zeroRoot = computeFraction(zeroRoot)
 		if (prettyFlag)
 			console.log(`\tThe discriminant of this equation is equal to \x1b[33;1m0\x1b[0m.\n\tSo it has a unique real root: \x1b[1;33m${zeroRoot}\x1b[0m.\n`)
 		else
 			console.log(`Discriminant is equal to 0, the only solution is:\n${zeroRoot}`)
 	} else if (complexFlag) {
-		const positiveComplexRoot = `(${-b} + ${parseFloat(Math.sqrt(Math.abs(discriminant)).toFixed(precision))} * i) / ${parseFloat(Number(2 * a).toFixed(precision))}`
-		const negativeComplexRoot = `(${-b} - ${parseFloat(Math.sqrt(Math.abs(discriminant)).toFixed(precision))} * i) / ${parseFloat(Number(2 * a).toFixed(precision))}`
+		let absoluteDiscriminant = parseFloat(Math.sqrt(Math.abs(discriminant)).toFixed(precision))
+
+		if (fractionFlag)
+			absoluteDiscriminant = computeFraction(absoluteDiscriminant)
+
+		const positiveComplexRoot = `(${-b} + ${absoluteDiscriminant} * i) / ${parseFloat(Number(2 * a).toFixed(precision))}`
+		const negativeComplexRoot = `(${-b} - ${absoluteDiscriminant} * i) / ${parseFloat(Number(2 * a).toFixed(precision))}`
 
 		if (prettyFlag)
-			console.log(`\tThe discriminant of this equation is stricly negative (\x1b[1;33m${discriminant}\x1b[0m).\n\tIt has two complex roots: \x1b[1;33m${positiveComplexRoot}\x1b[0m and \x1b[1;33m${negativeComplexRoot}\x1b[0m.\n`)
+			console.log(`\tThe discriminant of this equation is stricly negative (\x1b[1;33m${discriminantPrint}\x1b[0m).\n\tIt has two complex roots: \x1b[1;33m${positiveComplexRoot}\x1b[0m and \x1b[1;33m${negativeComplexRoot}\x1b[0m.\n`)
 		else
 			console.log(`Discriminant is strictly negative, the two solutions are:\n${positiveComplexRoot}\n${negativeComplexRoot}`)
 	} else {
@@ -87,10 +123,13 @@ const solveQuadratic = ({ a, b, c, args }) => {
 }
 
 const solveLinear = ({ b, c, args }) => {
-	const precision = (typeof args.precision !== 'undefined' ? args.precision : 6)
-	const root = parseFloat(Number(-c / b).toFixed(precision))
 	const prettyFlag = (args.p || args.pretty ? true : false)
+	const fractionFlag = (args.f || args.fraction ? true : false)
+	const precision = (typeof args.precision !== 'undefined' ? args.precision : 6)
+	let root = parseFloat(Number(-c / b).toFixed(precision))
 
+	if (fractionFlag)
+		root = computeFraction(root)
 	if (prettyFlag)
 		console.log(`\tThe solution to this equation is \x1b[1;33m${root}\x1b[0m.\n`)
 	else

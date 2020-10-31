@@ -1,4 +1,4 @@
-const { errorHandler } = require('./error.js')
+const errorHandler = require('./error.js')
 
 const trimFlagName = (flagString) => {
 	let hyphenCount = 0
@@ -82,7 +82,6 @@ const parsePolynom = ({ polynom, side }) => {
 	}
 
 	const foundMultiply = polynom.includes('*')
-	const foundFloat = polynom.includes('.')
 	const foundX = polynom.includes('X')
 	const foundExponentSign = polynom.includes('^')
 	const foundSign = polynom.includes('-') || polynom.includes('+')

@@ -19,4 +19,4 @@ const errorHandler = (error, details) => {
 	process.exit()
 }
 
-module.exports = { errorHandler }
+module.exports = errorHandler

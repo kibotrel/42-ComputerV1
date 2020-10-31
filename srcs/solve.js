@@ -236,10 +236,8 @@ const solveEquation = ({ equation, args }) => {
 		else
 			solveConstant({ c, args })
 	}
+
+	return reducedList
 }
 
-const plotEquation = () =>  {
-	return undefined
-}
-
-module.exports = { solveEquation, plotEquation }
+module.exports = solveEquation

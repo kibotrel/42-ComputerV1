@@ -5,3 +5,7 @@ package-lock.json
 # Eslint
 .eslintcache
 .eslintrc.json
+
+# Generated files
+
+graph.png

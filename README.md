@@ -1,5 +1,5 @@
-# 42-ComputerV1
-[![CodeFactor](https://www.codefactor.io/repository/github/kibotrel/42-computerv1/badge)](https://www.codefactor.io/repository/github/kibotrel/42-computerv1) ![GitHub](https://img.shields.io/github/license/kibotrel/42-ComputerV1?color=blue)
+# 42-ComputorV1
+[![CodeFactor](https://www.codefactor.io/repository/github/kibotrel/42-computorv1/badge)](https://www.codefactor.io/repository/github/kibotrel/42-computorv1) ![GitHub](https://img.shields.io/github/license/kibotrel/42-ComputorV1?color=blue)
 
 This project is a small equation solver. It was made using [plotter](https://www.npmjs.com/package/plotter) to get a nice overview of the equation's shape.
 
@@ -86,11 +86,11 @@ This command output information about the given equation such as its degree and 
 
 ### Equation
 
-As stated above, the **equation** variable must be formated in some way in order for the program to parse it correctly. Each polynom is composed of its factor, X and its power all together noted as `"factor * X^power"` in the equation.
+As stated above, the **equation** variable must be formated in some way in order for the program to parse it correctly. Each polynom is composed of a factor, X and its power noted as `"factor * X^power"` in the equation.
 
 > Example: `"-8.6 * X^2"`
 
-The program handle a lot more than that and allows a more flexible way of inputing data. First, if `power = 1` you can ommit this parameter for this particular polynom.
+The program handles a lot more than that and allows a more flexible way of inputing data. First, if `power = 1` you can ommit this parameter for this particular polynom.
 
 > Example: `"3 * X^1"` becomes `"3 * X"`
 

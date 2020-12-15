@@ -51,7 +51,7 @@ This command output information about the given equation such as its degree and 
   --flagName or -flagAlias
   ```
   
-  It adds a boolean (flagName or flagAlias) set to **true** to the argument object.
+  It adds a boolean (`flagName` or `flagAlias`) set to `true` to the argument object.
 
 * Variables
   
@@ -61,8 +61,26 @@ This command output information about the given equation such as its degree and 
   variableName="variableValue"
   ```
   
-  It automatically adds a string (variableName) set to variableValue to the argument object.
+  It automatically adds a string (`variableName`) set to `variableValue` to the argument object.
 
 ### Features
 
-WIP
+* Flags:
+
+  Name | Alias | Description
+  :---: | :---: | :---:
+  `--complex` | `-c` | Computes complex roots of quadratic equations
+  `--fraction` | `-f` | Displays every single output as non reductible fraction
+  `--graph` | `-g` | Plots the reduced equation on a graph exported as an image
+  `--help` | `-h` | Displays a little built-in usage
+  `--natural` | `-n` | Outputs values in a more common notation
+  `--pretty` | `-p` | Makes program's output a lot more readable
+  `--verbose` | `-v` | Adds in-between steps of the solving process to the output
+
+* Variables:
+
+  Name | Description 
+  :---: | :---:
+  `equation` | The equation to solve. It must follow a particular scheme.<br>`Polynom1 ± ... ± PolynomN = PolynomN+1 ± ... ± PolynomN+M`<br>Read more about it bellow.
+  `precision` | The number of decimals to display in ouputed values. Set to 6 by default and ranges from 0 to 12 inclusive. | `0 >= x <= 12`
+

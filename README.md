@@ -81,6 +81,31 @@ This command output information about the given equation such as its degree and 
 
   Name | Description 
   :---: | :---:
-  `equation` | The equation to solve. It must follow a particular scheme.<br>`Polynom1 ± ... ± PolynomN = PolynomN+1 ± ... ± PolynomN+M`<br>Read more about it bellow.
-  `precision` | The number of decimals to display in ouputed values. Set to 6 by default and ranges from 0 to 12 inclusive. | `0 >= x <= 12`
+  `equation` | The equation to solve. It must follow this particular scheme:<br>`"Polynom1 ± ... ± PolynomN = PolynomN+1 ± ... ± PolynomN+M"`<br>Read more about it bellow.
+  `precision` | The number of decimals to display in ouputed values. Set to **6** by default and ranges from **0** to **12** inclusive.
 
+### Equation
+
+As stated above, the **equation** variable must be formated in some way in order for the program to parse it correctly. Each polynom is composed of its factor, X and its power all together noted as `"factor * X^power"` in the equation.
+
+> Example: `"-8.6 * X^2"`
+
+The program handle a lot more than that and allows a more flexible way of inputing data. First, if `power = 1` you can ommit this parameter for this particular polynom.
+
+> Example: `"3 * X^1"` becomes `"3 * X"`
+
+It also understand that everything between a sign and the character `X` is considered as it's `factor` so you can ommit to put the multiply sign.
+
+> Example: `"7.2 * X^3"` becomes `"7.2X^3"`
+
+If by any chance `factor = 1` it can be, once again, ommited because it does not affect the value of the final polynom.
+
+> Example: `"1 * X^2"` becomes `"X^2"`
+
+Likewise if `power = 0` the whole `X^factor` part can be ommited because it results in multiplying `factor` by **1** which does nothing as well.
+
+> Example: `"-5 * X^0"` becomes `"-5"`
+
+Of course, everything can be mixed and the whole remain understandable by the program. Here's a full example.
+
+> Example: `"-6.72 * X + X^3 - 4X^0 - 7X = 9 + 2X^2 - 8.4X + 13"`

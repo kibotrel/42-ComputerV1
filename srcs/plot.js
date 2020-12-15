@@ -1,4 +1,4 @@
-const { plot } = require('../nodejs-plotter-fork-fix/plotter')
+const { plot } = require('../nodejs-plotter/plotter.js')
 
 const plotEquation = (polynomList) =>  {
   const data = []

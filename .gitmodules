@@ -1,3 +1,3 @@
-[submodule "nodejs-plotter-fork-fix"]
-	path = nodejs-plotter-fork-fix
-	url = https://github.com/kibotrel/nodejs-plotter.git
+[submodule "nodejs-plotter"]
+	path = nodejs-plotter
+	url = https://github.com/richardeoin/nodejs-plotter.git

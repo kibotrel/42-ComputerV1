@@ -12,7 +12,7 @@ const ErrorDict = {
 	badPolynom: Messages.badPolynom
 }
 
-const errorHandler = (error, details) => {
+const errorHandler = (error) => {
 	const reason = ErrorDict[error]
 
 	console.log(reason)

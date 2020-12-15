@@ -21,7 +21,7 @@ const plotEquation = (polynomList) =>  {
     xlabel: 'x',
     ylabel: 'y',
     x_begin: -50,
-    finish: (error, stdout, stderr) => {}
+    finish: () => {}
   })
 }
 

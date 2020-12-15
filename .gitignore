@@ -1,5 +1,6 @@
 # Dependency directories and npm stuff
 node_modules/
+nodejs-plotter
 package-lock.json
 
 # Eslint

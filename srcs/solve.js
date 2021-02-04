@@ -50,9 +50,9 @@ const reduceEquation = ({ polynomlist, args }) => {
 		if (firstPolynom && (reducedList.length === 1 || polynom.factor !== 0 || polynom.power === 0)) {
 			reducedEquation += (polynom.sign < 0 ? '-' : '')
 			if (naturalFlag)
-				reducedEquation += `${polynom.factor !== 1 || polynom.power === 0 ? polynom.factor : ''}${polynom.power ? 'X' : ''}${polynom.power > 1 ? `^${polynom.power}` : ''}`
+				reducedEquation += `${polynom.factor !== 1 || polynom.power === 0 ? polynom.factor : ''}${polynom.power && polynom.factor !== 0 ? 'X' : ''}${polynom.power > 1 && polynom.factor !== 0 ? `^${polynom.power}` : ''}`
 			else
-				reducedEquation += `${polynom.factor} * X^${polynom.power}`
+				reducedEquation += `${polynom.factor} * X^${polynom.power && polynom.factor !== 0 ? polynom.power : 0}`
 			firstPolynom = false
 			continue
 		}
@@ -186,20 +186,16 @@ const solveConstant = ({ c, args }) => {
 }
 
 const getDegree = (polynomList) => {
-	if (polynomList.length === 1) {
-		if (polynomList[0].power === 2) {
-			if (polynomList[0].factor !== 0) {
-				return 2
-			} else {
-				return 0
-			}
-		} else
-			return polynomList[0].power
+	if (polynomList.length === 1 && polynomList[0].factor === 0) {
+		return 0
 	}
+
 	for (polynom of polynomList) {
-		if (polynom.factor !== 0)
+		if (polynom.factor !== 0) {
 			return polynom.power
+		}
 	}
+
 	return polynomList[polynomList.length - 1].power
 }
 
